@@ -6,7 +6,7 @@ function createGameboard() {
     for (let i = 0; i < row; i++) {
         board[i] = [];
         for (let j = 0; j < column; j++){
-            board[i].push(cell());
+            board[i].push(cell().value);
         }
     }
     
@@ -23,7 +23,7 @@ function createGameboard() {
         }
     }
 
-    return {logBoard, placeMark,}
+    return {logBoard, placeMark,};
 }
 
 function cell() {
@@ -36,6 +36,8 @@ function cell() {
     const getCellValue = function(){
         return value;
     }
+
+    return {addMark, getCellValue,};
 }
 
 function gameController(playerOneName, playerOneMark, playerTwoName, playerTwoMark) {
@@ -66,9 +68,20 @@ function gameController(playerOneName, playerOneMark, playerTwoName, playerTwoMa
         return activePlayer;
     }
 
-    gameboard.logBoard();
+   
 
+    const playRound = function(row, column){
+        console.log(`It is ${getActivePlayer().name}'s turn...`);
+        gameboard.placeMark(getActivePlayer().mark, row, column);
+        console.log(`${getActivePlayer().name} placed a mark at row: ${row}, column: ${column}...`)
+        gameboard.logBoard();
+        switchPlayer();
+    }
+
+    gameboard.logBoard();
     
+
+    return {playRound, getActivePlayer, }
 }
 
-const controller = gameController();
+const controller = gameController('Player1', 1, 'Player2', 2);
