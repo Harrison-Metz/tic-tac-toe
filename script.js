@@ -28,13 +28,53 @@ function createGameboard() {
     const placeMark = function(player, row, column){
         if (board[row][column].getCellValue() === 0){
             board[row][column].addMark(player);
+            return true;
         } else {
             console.log('That space is already taken...');
-            return;
+            return false;
         }
     }
 
-    return {logBoard, placeMark, getBoard,};
+    const checkWinner = function(board){
+        // check rows
+        for (let r = 0; r < row; r++){
+            const a = board[r][0].getCellValue();
+            const b = board[r][1].getCellValue();
+            const c = board[r][2].getCellValue();
+
+            if (a === b && a ===c && a !== 0){
+                console.log(`Player ${a} wins!`);
+                return;
+            }
+        }
+        //check columns
+        for(let col = 0; col < column; col++){
+            const a = board[0][col].getCellValue();
+            const b = board[1][col].getCellValue();
+            const c = board[2][col].getCellValue();
+
+            if (a === b && a === c && a !== 0){
+                console.log(`Player ${a} wins!`);
+                return;
+            }
+        }
+        //check diagonals
+        const center = board[1][1].getCellValue();
+        if (center !== 0){
+            //top-left to bottom-right
+            if (board[0][0].getCellValue() === center && board[2][2].getCellValue() === center){
+                console.log(`Player ${center} wins!`);
+                return;
+            }
+            //top-right to bottom-left
+            if (board[0][2].getCellValue() === center && board[2][0].getCellValue() === center){
+                console.log(`Player ${center} wins!`);
+                return;
+            }
+        }
+    }
+
+    return {logBoard, placeMark, getBoard, checkWinner, };
 }
 
 function cell() {
@@ -82,10 +122,18 @@ function gameController(playerOneName, playerOneMark, playerTwoName, playerTwoMa
    
 
     const playRound = function(row, column){
-        console.log(`It is ${getActivePlayer().name}'s turn...`);
-        gameboard.placeMark(getActivePlayer().mark, row, column);
+        const moveSuccessful = gameboard.placeMark(getActivePlayer().mark, row, column);
+    
+        if (!moveSuccessful) {
+            console.log(`Invalid move. ${getActivePlayer().name}, please try again.`);
+            return; // Exit early without switching players
+        }
+        //gameboard.placeMark(getActivePlayer().mark, row, column);
         console.log(`${getActivePlayer().name} placed a mark at row: ${row}, column: ${column}...`)
         gameboard.logBoard();
+        gameboard.checkWinner(gameboard.getBoard());
+        
+
         switchPlayer();
     }
 
