@@ -140,7 +140,36 @@ function gameController(playerOneName, playerOneMark, playerTwoName, playerTwoMa
     gameboard.logBoard();
     
 
-    return {playRound, getActivePlayer, }
+    return {playRound, getActivePlayer, gameboard,}
 }
 
-const controller = gameController('Player1', 1, 'Player2', 2);
+function screenController(){
+    const controller = gameController('Player1', 1, 'Player2', 2);
+    const boardDiv = document.querySelector('.board');
+    const messageBox = document.querySelector('.messageBox');
+
+    messageBox.textContent = `${controller.getActivePlayer().name}'s turn`;
+
+    for (let i = 0; i < 3; i++){
+        for (let j = 0; j < 3; j++){
+            const cellButton = document.createElement('button');
+            cellButton.classList.add('cell');
+            cellButton.dataset.row = i;
+            cellButton.dataset.column = j;
+            cellButton.addEventListener('click', () => {
+                controller.playRound(i, j);
+                const board = controller.gameboard;
+                const cellValue = board.getBoard()[i][j].getCellValue();
+                if (cellValue === 1){
+                    cellButton.textContent = 'X';
+                } else if (cellValue === 2){
+                    cellButton.textContent = 'O';
+                }
+                messageBox.textContent = `${controller.getActivePlayer().name}'s turn`;
+            });
+            boardDiv.appendChild(cellButton);
+        }
+    }
+}
+
+screenController();
