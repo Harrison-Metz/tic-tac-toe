@@ -146,9 +146,9 @@ function gameController(playerOneName, playerOneMark, playerTwoName, playerTwoMa
 function screenController(){
     const controller = gameController('Player1', 1, 'Player2', 2);
     const boardDiv = document.querySelector('.board');
-    const messageBox = document.querySelector('.messageBox');
+    const playerTurnBox = document.querySelector('.playerTurnBox');
 
-    messageBox.textContent = `${controller.getActivePlayer().name}'s turn`;
+    playerTurnBox.textContent = `${controller.getActivePlayer().name}'s turn`;
 
     for (let i = 0; i < 3; i++){
         for (let j = 0; j < 3; j++){
@@ -165,7 +165,7 @@ function screenController(){
                 } else if (cellValue === 2){
                     cellButton.textContent = 'O';
                 }
-                messageBox.textContent = `${controller.getActivePlayer().name}'s turn`;
+                playerTurnBox.textContent = `${controller.getActivePlayer().name}'s turn`;
             });
             boardDiv.appendChild(cellButton);
         }
