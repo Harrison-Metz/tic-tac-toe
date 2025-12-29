@@ -36,6 +36,12 @@ function createGameboard() {
     }
 
     const checkWinner = function(board){
+        const gameButtons = document.querySelectorAll('.cell');
+        function disableButtons(buttons){
+            buttons.forEach(button => {
+                button.disabled = true;
+            });
+        }
         // check rows
         for (let r = 0; r < row; r++){
             const a = board[r][0].getCellValue();
@@ -44,6 +50,7 @@ function createGameboard() {
 
             if (a === b && a ===c && a !== 0){
                 console.log(`Player ${a} wins!`);
+                disableButtons(gameButtons);
                 return;
             }
         }
@@ -55,6 +62,7 @@ function createGameboard() {
 
             if (a === b && a === c && a !== 0){
                 console.log(`Player ${a} wins!`);
+                disableButtons(gameButtons);
                 return;
             }
         }
@@ -64,11 +72,13 @@ function createGameboard() {
             //top-left to bottom-right
             if (board[0][0].getCellValue() === center && board[2][2].getCellValue() === center){
                 console.log(`Player ${center} wins!`);
+                disableButtons(gameButtons);
                 return;
             }
             //top-right to bottom-left
             if (board[0][2].getCellValue() === center && board[2][0].getCellValue() === center){
                 console.log(`Player ${center} wins!`);
+                disableButtons(gameButtons);
                 return;
             }
         }
@@ -144,9 +154,11 @@ function gameController(playerOneName, playerOneMark, playerTwoName, playerTwoMa
 }
 
 function screenController(){
-    const controller = gameController('Player1', 1, 'Player2', 2);
     const boardDiv = document.querySelector('.board');
     const playerTurnBox = document.querySelector('.playerTurnBox');
+    let playerOneName = 'Player 1';
+    let playerTwoName = 'Player 2';
+    const controller = gameController(playerOneName, 1, playerTwoName, 2);
 
     playerTurnBox.textContent = `${controller.getActivePlayer().name}'s turn`;
 
